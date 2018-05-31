@@ -1,0 +1,143 @@
+/****** WTPart Schema  ******/
+
+
+LOAD CSV WITH HEADERS FROM 'http://anurpandey2l1.ptcnet.ptc.com:8080/docs/mycsv/wtpart.csv' AS line
+CREATE (:WTPart { ContainerReferenceClass: line.ContainerReferenceClass, ContainerReferenceId: line.ContainerReferenceId, UpdatedBy: line.UpdatedBy,UpdatedById: line.UpdatedById,Iteration: line.Iteration,LatestIteration: line.LatestIteration,MasterClass: line.MasterClass,MasterReference: line.MasterReference,LifeCycleState: line.LifeCycleState,CreateTS: line.CreateTS,ModifiedTS: line.ModifiedTS,ClassName: line.ClassName,RecordId: line.RecordId, Variation1: line.Variation1,Variation2: line.Variation2,VersionInfo: line.VersionInfo,VersionLevel: line.VersionLevel,ViewClassName: line.ViewClassName,ViewId: line.ViewId})
+
+
+SELECT [classnamekeycontainerReferen] As ContainerReferenceClass
+      ,[idA3containerReference] As ContainerReferenceId
+      ,[classnamekeyD2iterationInfo] As UpdatedBy
+      ,[idA3D2iterationInfo] As UpdatedById
+      ,[iterationIdA2iterationInfo] As Iteration
+      ,[latestiterationInfo] As LatestIteration
+      ,[classnamekeymasterReference] As MasterClass
+      ,[idA3masterReference] As MasterReference
+      ,[statestate] As LifeCycleState
+      ,[createStampA2] As CreateTS
+      ,[modifyStampA2] As ModifiedTS
+      ,[classnameA2A2] As ClassName
+      ,[idA2A2] As RecordId
+      ,[variation1] As Variation1
+      ,[variation2] As Variation2
+      ,[versionIdA2versionInfo] As VersionInfo
+      ,[versionLevelA2versionInfo] As VersionLevel
+      ,[classnamekeyview] As ViewClassName
+      ,[idA3view] As ViewId
+  FROM [foxb13].[foxb13].[WTPart]
+------------------------------------------------------------------------------------------------------------------------------------------
+  /****** WTPartMaster ******/
+  
+LOAD CSV WITH HEADERS FROM 'http://anurpandey2l1.ptcnet.ptc.com:8080/docs/mycsv/wtpartmaster.csv' AS line
+CREATE (:WTPartMaster { ContainerReferenceClass: line.ContainerReferenceClass, ContainerReferenceId: line.ContainerReferenceId, GenericType: line.GenericType,PartName: line.PartName,PartNumber: line.PartNumber,OrgClass: line.OrgClass,OrgClassId: line.OrgClassId,IsServiceable: line.IsServiceable,CreateTS: line.CreateTS,ModifiedTS: line.ModifiedTS,ClassName: line.ClassName,RecordId: line.RecordId})
+
+-----------------------------------------------------------------------
+SELECT [classnamekeycontainerReferen] As ContainerReferenceClass
+      ,[idA3containerReference] As ContainerReferenceId
+      ,[genericType] As GenericType
+      ,[name] As PartName
+      ,[WTPartNumber] As PartNumber
+      ,[classnamekeyorganizationRefe] As OrgClass
+      ,[idA3organizationReference] As OrgClassId
+      ,[serviceable] As IsServiceable
+      ,[createStampA2] As CreateTS
+      ,[modifyStampA2] As ModifiedTS
+      ,[classnameA2A2] As ClassName
+      ,[idA2A2] As RecordId
+  FROM [foxb13].[foxb13].[WTPartMaster]
+  
+------------------------------------------------------------------------------------------------------------------------------------------
+
+
+/****** WTPartUsageLink  ******/
+
+
+LOAD CSV WITH HEADERS FROM 'http://anurpandey2l1.ptcnet.ptc.com:8080/docs/mycsv/wtpartusagelink.csv' AS line
+CREATE (:WTPartUsageLink { ComponentId: line.ComponentId,  Amount: line.Amount,Unit: line.Unit,UsedByClass: line.UsedByClass,UsedById: line.UsedById,UsesClass: line.UsesClass,UsesId: line.UsesId,CreateTS: line.CreateTS,ModifiedTS: line.ModifiedTS,ClassName: line.ClassName,RecordId: line.RecordId})
+
+
+SELECT [componentId] As ComponentId
+      ,[amountA7] As Amount
+      ,[unitA7] As Unit
+      ,[classnamekeyroleAObjectRef] As UsedByClass
+      ,[idA3A5] As UsedById
+      ,[classnamekeyroleBObjectRef] As UsesClass
+      ,[idA3B5] As UsesId
+      ,[createStampA2] As CreateTS
+      ,[modifyStampA2] AS ModifiedTS
+      ,[classnameA2A2] As ClassName
+      ,[idA2A2] As RecordId
+  FROM [foxb13].[foxb13].[WTPartUsageLink];
+  
+------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+/****** PartUsesOccurrence  ******/
+
+LOAD CSV WITH HEADERS FROM 'http://anurpandey2l1.ptcnet.ptc.com:8080/docs/mycsv/partusesoccurrence.csv' AS line
+CREATE (:PartUsesOccurrence { ContextReferenceClass: line.ContextReferenceClass,ContextReferenceId: line.ContextReferenceId,LinkClass: line.LinkClass,LinkClassId: line.LinkClassId,Name: line.Name,Amount: line.Amount,Unit: line.Unit,CreateTS: line.CreateTS,ModifiedTS: line.ModifiedTS,ClassName: line.ClassName,RecordId: line.RecordId,Trans1: line.Trans1,Trans2: line.Trans2,Trans3: line.Trans3,OccGlobalId: line.OccGlobalId,OccIdentifier: line.OccIdentifier})
+
+
+SELECT
+       [classnamekeycontextReference] As ContextReferenceClass
+      ,[idA3contextReference] As ContextReferenceId
+      ,[classnamekeylinkReference] As LinkClass
+      ,[idA3linkReference] As LinkClassId
+      ,[name] As Name
+      ,[amountC5] As Amount
+      ,[unitC5] As Unit
+      ,[createStampA2] As CreateTS
+      ,[modifyStampA2] As ModifiedTS
+      ,[classnameA2A2] As ClassName
+      ,[idA2A2] As RecordId
+      ,[translation_0] As Trans1
+      ,[translation_1] As Trans2
+      ,[translation_2] As Trans3
+      ,[usesOccurrenceGlobalId] As OccGlobalId
+      ,[usesOccurrenceIdentifier] As OccIdentifier
+  FROM [foxb13].[foxb13].[PartUsesOccurrence]
+ 
+---------------------------------------------------------------------------------------------------------------------------------
+RELATIONSHIPS 
+---------------------------------------------------------------------------------------------------------------------------------
+
+A) Part & Master 
+
+MATCH (a:WTPartMaster),(b:WTPart)
+WHERE a.RecordId = b.MasterReference
+CREATE (a)-[r:iteratedTo]->(b)
+RETURN type(r)
+
+
+B) UsageLink & Master / Part
+
+c) PartUsesOccurrence & UsageLink
+MATCH (a:WTPartUsageLink),(b:WTPart)
+WHERE a.UsedById = b.RecordId
+CREATE (a)-[r:USEDBY]->(b)
+RETURN type(r)
+
+
+MATCH (a:WTPartUsageLink),(b:WTPartMaster)
+WHERE a.UsesId = b.RecordId
+CREATE (a)-[r:USESMASTER]->(b)
+RETURN type(r)
+
+
+c ) PartUsesOccurrence & UsageLink 
+
+MATCH (a:PartUsesOccurrence),(b:WTPartUsageLink)
+WHERE a.LinkClassId = b.RecordId
+CREATE (a)-[r:USESLINKREFERENCE]->(b)
+RETURN type(r)
+ 
+
+  
+  
+
+  
+  
+
+  
+  

@@ -1,0 +1,80 @@
+/****** WTPart Schema  ******/
+SELECT [classnamekeycontainerReferen] As ContainerReferenceClass
+      ,[idA3containerReference] As ContainerReferenceId
+      ,[classnamekeyD2iterationInfo] As UpdatedBy
+      ,[idA3D2iterationInfo] As UpdatedById
+      ,[iterationIdA2iterationInfo] As Iteration
+      ,[latestiterationInfo] As LatestIteration
+      ,[classnamekeymasterReference] As MasterClass
+      ,[idA3masterReference] As MasterReference
+      ,[statestate] As LifeCycleState
+      ,[createStampA2] As CreateTS
+      ,[modifyStampA2] As ModifiedTS
+      ,[classnameA2A2] As ClassName
+      ,[idA2A2] As RecordId
+      ,[variation1] As Variation1
+      ,[variation2] As Variation2
+      ,[versionIdA2versionInfo] As VersionInfo
+      ,[versionLevelA2versionInfo] As VersionLevel
+      ,[classnamekeyview] As ViewClassName
+      ,[idA3view] As ViewId
+  FROM [foxb13].[foxb13].[WTPart]
+  
+  /****** WTPartMaster ******/
+  
+  
+SELECT [classnamekeycontainerReferen] As ContainerReferenceClass
+      ,[idA3containerReference] As ContainerReferenceId
+      ,[genericType] As GenericType
+      ,[name] As PartName
+      ,[WTPartNumber] As PartNumber
+      ,[classnamekeyorganizationRefe] As OrgClass
+      ,[idA3organizationReference] As OrgClassId
+      ,[serviceable] As IsServiceable
+      ,[createStampA2] As CreateTS
+      ,[modifyStampA2] As ModifiedTS
+      ,[classnameA2A2] As ClassName
+      ,[idA2A2] As RecordId
+  FROM [foxb13].[foxb13].[WTPartMaster]
+  
+/****** WTPartUsageLink  ******/
+SELECT [componentId] As ComponentId
+      ,[amountA7] As Amount
+      ,[unitA7] As Unit
+      ,[classnamekeyroleAObjectRef] As UsedByClass
+      ,[idA3A5] As UsedById
+      ,[classnamekeyroleBObjectRef] As UsesClass
+      ,[idA3B5] As UsesId
+      ,[createStampA2] As CreateTS
+      ,[modifyStampA2] AS ModifiedTS
+      ,[classnameA2A2] As ClassName
+      ,[idA2A2] As RecordId
+  FROM [foxb13].[foxb13].[WTPartUsageLink];
+  
+/****** PartUsesOccurrence  ******/
+SELECT
+       [classnamekeycontextReference] As ContextReferenceClass
+      ,[idA3contextReference] As ContextReferenceId
+      ,[classnamekeylinkReference] As LinkClass
+      ,[idA3linkReference] As LinkClassId
+      ,[name] As Name
+      ,[amountC5] As Amount
+      ,[unitC5] As Unit
+      ,[createStampA2] As CreateTS
+      ,[modifyStampA2] As ModifiedTS
+      ,[classnameA2A2] As ClassName
+      ,[idA2A2] As RecordId
+      ,[translation_0] As Trans1
+      ,[translation_1] As Trans2
+      ,[translation_2] As Trans3
+      ,[usesOccurrenceGlobalId] As OccGlobalId
+      ,[usesOccurrenceIdentifier] As OccIdentifier
+  FROM [foxb13].[foxb13].[PartUsesOccurrence]
+  
+  
+
+  
+  
+
+  
+  

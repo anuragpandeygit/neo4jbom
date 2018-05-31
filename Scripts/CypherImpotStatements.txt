@@ -1,0 +1,53 @@
+MATCH (n:WTPartMaster) DETACH DELETE n
+
+-- create WTPartMaster
+LOAD CSV WITH HEADERS FROM 'http://anurpandey2l1.ptcnet.ptc.com:8080/docs/mycsv/wtpartmaster.csv' AS line
+CREATE (:WTPartMaster { PartName: line.name, PartNumber: line.WTPartNumber, Id: line.idA2A2})
+
+-- Load WTPart
+LOAD CSV WITH HEADERS FROM 'http://anurpandey2l1.ptcnet.ptc.com:8080/docs/mycsv/wtpart.csv' AS line
+CREATE (:WTPart { MasterReference: line.idA3masterReference,  Version: line.versionIdA2versionInfo, Iteration: line.iterationIdA2iterationInfo, Id: line.idA2A2})
+
+
+MATCH (a:WTPartMaster),(b:WTPart)
+WHERE a.Id = b.MasterReference
+CREATE (a)-[r:hasVersion]->(b)
+RETURN type(r)
+
+-- creating WTPartUsageLink 
+
+LOAD CSV WITH HEADERS FROM 'http://anurpandey2l1.ptcnet.ptc.com:8080/docs/mycsv/partusagelink.csv' AS line
+CREATE (:WTPartUsageLink { UsedByClass: line.classnamekeyroleAObjectRef,  UsedById: line.idA3A5,
+UsesClass: line.classnamekeyroleBObjectRef,UsesId: line.idA3B5,Amount: line.amountA7,Unit: line.unitA7,ClassName: line.classnameA2A2,Id: line.idA2A2,CreateDate: line.createStampA2,UniqueId: line.uniqueIdsourceIdentification})
+
+
+--create partusesoccurrence data 
+
+LOAD CSV WITH HEADERS FROM 'http://anurpandey2l1.ptcnet.ptc.com:8080/docs/mycsv/partusesocr.csv' AS line
+CREATE (:PartUsesOccurrence { ContextClass: line.classnamekeycontextReference,  ContextId: line.idA3contextReference,
+LinkClass: line.classnamekeylinkReference,LinkId: line.idA3linkReference,Name: line.name,Amount: line.amountC5, Unit: line.unitC5,ClassName: line.classnameA2A2,Id: line.idA2A2,CreateDate: line.createStampA2,OccurrenceIdentifier: line.usesOccurrenceDataIdentifier})
+
+
+
+-- pending create relationships 
+
+uses , usedby , link reference ( partusesocr ) 
+
+MATCH (a:WTPartUsageLink),(b:WTPart)
+WHERE a.UsedById = b.Id
+CREATE (a)-[r:USEDBY]->(b)
+RETURN type(r)
+
+
+MATCH (a:WTPartUsageLink),(b:WTPartMaster)
+WHERE a.UsesId = b.Id
+CREATE (a)-[r:USESMASTER]->(b)
+RETURN type(r)
+
+MATCH (a:PartUsesOccurrence),(b:WTPartUsageLink)
+WHERE a.LinkId = b.Id
+CREATE (a)-[r:LINKREF]->(b)
+RETURN type(r)
+
+
+
